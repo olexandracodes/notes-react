@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   List,
@@ -8,14 +8,10 @@ import {
   Typography,
   Tooltip,
   Pagination,
+  IconButton,
 } from '@mui/material';
 import axios from 'axios';
-import {
-  StyledContainer,
-  listItemStyles,
-  listItemTextSecondaryStyles,
-  paginationContainerStyles,
-} from '../styles/homePageStyles'; 
+import { StyledContainer, listItemStyles, listItemTextSecondaryStyles, paginationContainerStyles } from '../styles/homePageStyles';
 
 const HomePage: React.FC = () => {
   const [notes, setNotes] = useState<{ id: number; title: string; content: string }[]>([]);
@@ -26,8 +22,8 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await axios.get('https://yourapi.com/notes');
-        setNotes(response.data.sort((a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+        setNotes(response.data.slice(0, 100).map((note: any) => ({ id: note.id, title: note.title, content: note.body })));
       } catch (error) {
         console.error('Error fetching notes', error);
       }
@@ -42,30 +38,37 @@ const HomePage: React.FC = () => {
 
   const displayNotes = notes.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
+  const handleDeleteNote = (id: number) => {
+    // Implement delete functionality
+    console.log(`Delete note with id ${id}`);
+  };
+
   return (
     <>
-     <StyledContainer>
-      <Typography variant="h4" gutterBottom>Notes</Typography>
-      <List>
-        {displayNotes.map((note) => (
-          <Tooltip title={note.content} arrow placement="right" key={note.id}>
-            <ListItem
-              component="div"
-              onClick={() => navigate(`/form/${note.id}`)}
-              sx={listItemStyles}
-            >
-              <ListItemText
-                primary={note.title}
-                secondary={note.content}
-                secondaryTypographyProps={{ sx: listItemTextSecondaryStyles }}
-              />
-            </ListItem>
-          </Tooltip>
-        ))}
-      </List>
-      
-    </StyledContainer>
-    <Box sx={paginationContainerStyles}>
+      <StyledContainer>
+        <Typography variant="h4" gutterBottom>Notes</Typography>
+        <List>
+          {displayNotes.map((note) => (
+            <Tooltip title={note.content} arrow placement="right" key={note.id}>
+              <ListItem
+                component="div"
+                onClick={() => navigate(`/form/${note.id}`)}
+                sx={listItemStyles}
+              >
+                <ListItemText
+                  primary={note.title}
+                  secondary={note.content}
+                  secondaryTypographyProps={{ sx: listItemTextSecondaryStyles }}
+                />
+                <IconButton aria-label="Delete" onClick={() => handleDeleteNote(note.id)}>
+                  Delete
+                </IconButton>
+              </ListItem>
+            </Tooltip>
+          ))}
+        </List>
+      </StyledContainer>
+      <Box sx={paginationContainerStyles}>
         <Pagination
           count={Math.ceil(notes.length / itemsPerPage)}
           page={page}
@@ -73,8 +76,8 @@ const HomePage: React.FC = () => {
           color="primary"
         />
       </Box>
+      <Link to="/form">Add Note</Link>
     </>
-   
   );
 };
 
