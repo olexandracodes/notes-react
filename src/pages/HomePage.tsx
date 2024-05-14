@@ -36,11 +36,18 @@ const HomePage: React.FC = () => {
     setPage(value);
   };
 
-  const displayNotes = notes.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const handleDeleteNote = async (id: number) => {
+    try {
+      await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`);
+      const updatedNotes = notes.filter((note) => note.id !== id);
+      setNotes(updatedNotes);
+    } catch (error) {
+      console.error(`Error deleting note with id ${id}`, error);
+    }
+  };
 
-  const handleDeleteNote = (id: number) => {
-    // Implement delete functionality
-    console.log(`Delete note with id ${id}`);
+  const handleNoteClick = (note: { id: number; title: string; content: string }) => {
+    navigate(`/form/${note.id}`);
   };
 
   return (
@@ -48,11 +55,11 @@ const HomePage: React.FC = () => {
       <StyledContainer>
         <Typography variant="h4" gutterBottom>Notes</Typography>
         <List>
-          {displayNotes.map((note) => (
+          {notes.map((note) => (
             <Tooltip title={note.content} arrow placement="right" key={note.id}>
               <ListItem
-                component="div"
-                onClick={() => navigate(`/form/${note.id}`)}
+                button
+                onClick={() => handleNoteClick(note)}
                 sx={listItemStyles}
               >
                 <ListItemText
