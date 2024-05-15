@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Note } from "../types";
 import { AppDispatch } from "../store";
+import { enqueueSnackbar } from "./snackbarSlice";
 
 export const fetchNotes = createAsyncThunk<Note[], void, { dispatch: AppDispatch }>(
     'notes/fetchNotes',
@@ -22,16 +23,19 @@ export const fetchNotes = createAsyncThunk<Note[], void, { dispatch: AppDispatch
 
 export const updateNote = createAsyncThunk<Note, { id: number, updates: Partial<Note> }, { dispatch: AppDispatch }>(
     'notes/updateNote',
-    async ({ id, updates }) => {
+    async ({ id, updates }, { dispatch }) => {
         try {
             const response = await axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`, updates);
-            return {
+            const updatedNote: Note = {
                 id: response.data.id,
                 title: response.data.title,
                 content: response.data.body,
-            } as Note;
+            };
+            dispatch(enqueueSnackbar({ message: 'Note updated successfully', severity: 'success' }));
+            return updatedNote;
         } catch (error) {
             console.error(`Error updating note with id ${id}:`, error);
+            dispatch(enqueueSnackbar({ message: 'Error updating note', severity: 'error' }));
             throw error;
         }
     }
@@ -39,16 +43,19 @@ export const updateNote = createAsyncThunk<Note, { id: number, updates: Partial<
 
 export const addNote = createAsyncThunk<Note, Partial<Note>, { dispatch: AppDispatch }>(
     'notes/addNote',
-    async (noteData) => {
+    async (noteData, { dispatch }) => {
         try {
             const response = await axios.post('https://jsonplaceholder.typicode.com/posts', noteData);
-            return {
+            const newNote: Note = {
                 id: response.data.id,
                 title: response.data.title,
                 content: response.data.body,
-            } as Note;
+            };
+            dispatch(enqueueSnackbar({ message: 'Note added successfully', severity: 'success' }));
+            return newNote;
         } catch (error) {
             console.error('Error adding note:', error);
+            dispatch(enqueueSnackbar({ message: 'Error adding note', severity: 'error' }));
             throw error;
         }
     }

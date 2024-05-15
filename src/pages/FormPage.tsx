@@ -29,25 +29,24 @@ const FormPage: React.FC = () => {
 	const handleSubmit = async (values: { title: string; content: string }) => {
 		try {
 			if (id) {
-				const response = await axios.put(
-					`https://jsonplaceholder.typicode.com/posts/${id}`,
-					{ ...values, id: parseInt(id) }
-				);
+				await axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+					...values,
+					id: parseInt(id),
+				});
 				dispatch(
 					updateNote({
 						id: parseInt(id),
-						updates: response.data,
+						updates: values,
 					})
 				);
 			} else {
-				const newId = Math.floor(Math.random() * 1000000);
 				const response = await axios.post(
 					`https://jsonplaceholder.typicode.com/posts`,
-					{ ...values, id: newId }
+					values
 				);
 				dispatch(
 					addNote({
-						id: newId,
+						id: response.data.id,
 						title: response.data.title,
 						content: response.data.body,
 					})
@@ -69,11 +68,7 @@ const FormPage: React.FC = () => {
 				<Typography variant="h4" gutterBottom>
 					{id ? "Edit Note" : "Add Note"}
 				</Typography>
-				<IconButton
-					aria-label="Close"
-					onClick={handleCancel}
-					style={{ position: "absolute", top: 10, right: 10 }}
-				>
+				<IconButton aria-label="Close" onClick={handleCancel}>
 					<CloseIcon />
 				</IconButton>
 			</Grid>
