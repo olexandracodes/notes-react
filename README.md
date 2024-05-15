@@ -46,6 +46,7 @@ This is a simple note-taking application built with React and Redux.
 ## Tech Stack
 
 - React
+- TypeScript
 - Redux
 - React Router
 - Axios
