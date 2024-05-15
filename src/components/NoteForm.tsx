@@ -6,6 +6,7 @@ import { ButtonBox, FormButton } from "../styles/formPageStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { setForm } from "../redux/slices/formSlice";
+import { Note } from "../redux/types";
 
 const NoteSchema = Yup.object().shape({
 	title: Yup.string().required("Title is required"),
@@ -24,14 +25,16 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit, id }) => {
 		state.notes.find((note) => note.id === parseInt(id || ""))
 	);
 
-	const initialValues = note ? { title: note.title, content: note.content } : formValues;
+	const initialValues = note
+		? { title: note.title, content: note.content }
+		: formValues;
 
 	const formik = useFormik({
 		initialValues,
 		validationSchema: NoteSchema,
 		onSubmit: (values) => {
 			onSubmit(values);
-			dispatch(setForm({ title: "", content: "" }));
+			dispatch(setForm(values));
 		},
 	});
 

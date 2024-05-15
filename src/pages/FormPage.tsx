@@ -8,13 +8,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import { clearForm, setForm } from "../redux/slices/formSlice";
 import { RootState } from "../redux/rootReducer";
+import { updateNote, addNote } from "../redux/slices/notesSlice";
+import { AppDispatch } from "../redux/store";
 
 const FormPage: React.FC = () => {
 	const { id } = useParams<{ id?: string }>();
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch: AppDispatch = useDispatch();
 	const notes = useSelector((state: RootState) => state.notes);
-	const note = notes.find((note) => note.id === parseInt(id!));
+	const note = notes.find((note: { id: number }) => note.id === parseInt(id!));
 
 	useEffect(() => {
 		if (note) {
@@ -27,14 +29,31 @@ const FormPage: React.FC = () => {
 	const handleSubmit = async (values: { title: string; content: string }) => {
 		try {
 			if (id) {
-				await axios.put(
+				const response = await axios.put(
 					`https://jsonplaceholder.typicode.com/posts/${id}`,
-					values
+					{ ...values, id: parseInt(id) }
+				);
+				dispatch(
+					updateNote({
+						id: parseInt(id),
+						updates: response.data,
+					})
 				);
 			} else {
-				await axios.post("https://jsonplaceholder.typicode.com/posts", values);
+				const newId = Math.floor(Math.random() * 1000000);
+				const response = await axios.post(
+					`https://jsonplaceholder.typicode.com/posts`,
+					{ ...values, id: newId }
+				);
+				dispatch(
+					addNote({
+						id: newId,
+						title: response.data.title,
+						content: response.data.body,
+					})
+				);
 			}
-			navigate("/");
+			handleCancel();
 		} catch (error) {
 			console.error("Error saving note", error);
 		}
