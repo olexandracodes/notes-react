@@ -4,25 +4,19 @@ This is a simple note-taking application built with React and Redux.
 
 ## Screenshots
 
-<div style="display: flex; justify-content: space-between;">
-  <div>
-    <h3>Desktop</h3>
-    ![Desktop Homepage](screenshots/desktop_homepage.png)
-  </div>
-  <div>
-    <h3>Mobile</h3>
-    ![Mobile Homepage](screenshots/mobile_homepage.png)
-  </div>
-</div>
+### Desktop
+![Desktop Homepage](screenshots/desktop_homepage.png)
+
+### Mobile
+![Mobile Homepage](screenshots/mobile_homepage.png)
+
 
 ## Functionality
 
 - Add, edit, and delete notes.
 - Responsive design for both desktop and mobile devices.
 - Notes are saved to the server using a RESTful API.
-
 ### Form Page
-
 ![Form Page](screenshots/form_page.png)
 
 ## How to Run
@@ -46,7 +40,6 @@ This is a simple note-taking application built with React and Redux.
 ## Tech Stack
 
 - React
-- TypeScript
 - Redux
 - React Router
 - Axios
