@@ -12,24 +12,32 @@ const NoteSchema = Yup.object().shape({
 	content: Yup.string().required("Content is required"),
 });
 
-const NoteForm: React.FC<{
+interface NoteFormProps {
 	onSubmit: (values: { title: string; content: string }) => void;
-}> = ({ onSubmit }) => {
+	id?: string;
+}
+
+const NoteForm: React.FC<NoteFormProps> = ({ onSubmit, id }) => {
 	const dispatch = useDispatch();
 	const formValues = useSelector((state: RootState) => state.form);
+	const note = useSelector((state: RootState) =>
+		state.notes.find((note) => note.id === parseInt(id || ""))
+	);
+
+	const initialValues = note ? { title: note.title, content: note.content } : formValues;
 
 	const formik = useFormik({
-		initialValues: formValues,
+		initialValues,
 		validationSchema: NoteSchema,
 		onSubmit: (values) => {
 			onSubmit(values);
-			dispatch(setForm({ title: "", content: "" })); 
+			dispatch(setForm({ title: "", content: "" }));
 		},
 	});
 
 	useEffect(() => {
 		return () => {
-			dispatch(setForm(formik.values)); 
+			dispatch(setForm(formik.values));
 		};
 	}, [dispatch, formik.values]);
 
