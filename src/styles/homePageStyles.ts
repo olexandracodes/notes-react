@@ -1,6 +1,5 @@
 import { Box, Button } from "@mui/material";
 import { styled } from "@mui/system";
-import { color } from "framer-motion";
 
 const { primaryColor, accentColor, backgroundColor, textColor } = {
 	primaryColor: "#fe5805",

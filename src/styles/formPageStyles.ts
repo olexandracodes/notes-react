@@ -1,4 +1,4 @@
-import { Box, Button, styled } from "@mui/material";
+import { Button, styled } from "@mui/material";
 
 const primaryColor = "#fe5805";
 const accentColor = "#1e38b2";
