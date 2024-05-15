@@ -2,13 +2,10 @@
 
 This is a simple note-taking application built with React and Redux.
 
-## Screenshots
-
-### Desktop
-![Desktop Homepage](screenshots/desktop_homepage.png)
-
-### Mobile
-![Mobile Homepage](screenshots/mobile_homepage.png)
+<div align="center">
+  <img src="screenshots/desktop_homepage.png" alt="Desktop Homepage" width="400"/>
+  <img src="screenshots/mobile_homepage.png" alt="Mobile Homepage" width="200"/>
+</div>
 
 
 ## Functionality
