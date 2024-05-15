@@ -1,86 +1,70 @@
-import React, { useEffect, useState } from "react";
-import { Formik, Form, Field, FormikProps } from "formik";
+import React, { useEffect } from "react";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { TextField } from "@mui/material";
 import { ButtonBox, FormButton } from "../styles/formPageStyles";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
+import { setForm } from "../redux/slices/formSlice";
 
 const NoteSchema = Yup.object().shape({
 	title: Yup.string().required("Title is required"),
 	content: Yup.string().required("Content is required"),
 });
 
-interface NoteFormProps {
-	initialValues: { title: string; content: string };
+const NoteForm: React.FC<{
 	onSubmit: (values: { title: string; content: string }) => void;
-}
+}> = ({ onSubmit }) => {
+	const dispatch = useDispatch();
+	const formValues = useSelector((state: RootState) => state.form);
 
-const NoteForm: React.FC<NoteFormProps> = ({ initialValues, onSubmit }) => {
-	const [title, setTitle] = useState(initialValues.title);
-	const [content, setContent] = useState(initialValues.content);
+	const formik = useFormik({
+		initialValues: formValues,
+		validationSchema: NoteSchema,
+		onSubmit: (values) => {
+			onSubmit(values);
+			dispatch(setForm({ title: "", content: "" })); 
+		},
+	});
 
 	useEffect(() => {
-		setTitle(initialValues.title);
-		setContent(initialValues.content);
-	}, [initialValues]);
+		return () => {
+			dispatch(setForm(formik.values)); 
+		};
+	}, [dispatch, formik.values]);
 
 	return (
-		<Formik
-			initialValues={initialValues}
-			validationSchema={NoteSchema}
-			onSubmit={onSubmit}
-		>
-			{({ errors, touched, setFieldValue }: FormikProps<{ title: string; content: string }>) => {
-				const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-					const newTitle = e.target.value;
-					setTitle(newTitle);
-					setFieldValue("title", newTitle);
-				};
-
-				const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-					const newContent = e.target.value;
-					setContent(newContent);
-					setFieldValue("content", newContent);
-				};
-
-				return (
-					<Form>
-						<div style={{ marginBottom: "16px" }}>
-							<Field
-								name="title"
-								id="title"
-								as={TextField}
-								label="Title"
-								fullWidth
-								variant="outlined"
-								error={!!errors.title && touched.title}
-								helperText={errors.title && touched.title ? errors.title : ""}
-								value={title}
-								onChange={handleTitleChange}
-							/>
-						</div>
-						<div style={{ marginBottom: "16px" }}>
-							<Field
-								name="content"
-								id="content"
-								as={TextField}
-								label="Content"
-								fullWidth
-								multiline
-								rows={4}
-								variant="outlined"
-								error={!!errors.content && touched.content}
-								helperText={errors.content && touched.content ? errors.content : ""}
-								value={content}
-								onChange={handleContentChange}
-							/>
-						</div>
-						<ButtonBox>
-							<FormButton type="submit">Submit</FormButton>
-						</ButtonBox>
-					</Form>
-				);
-			}}
-		</Formik>
+		<form onSubmit={formik.handleSubmit}>
+			<div style={{ marginBottom: "16px" }}>
+				<TextField
+					name="title"
+					label="Title"
+					fullWidth
+					variant="outlined"
+					value={formik.values.title}
+					onChange={formik.handleChange}
+					error={formik.touched.title && Boolean(formik.errors.title)}
+					helperText={formik.touched.title && formik.errors.title}
+				/>
+			</div>
+			<div style={{ marginBottom: "16px" }}>
+				<TextField
+					name="content"
+					label="Content"
+					fullWidth
+					multiline
+					rows={4}
+					variant="outlined"
+					value={formik.values.content}
+					onChange={formik.handleChange}
+					error={formik.touched.content && Boolean(formik.errors.content)}
+					helperText={formik.touched.content && formik.errors.content}
+				/>
+			</div>
+			<ButtonBox>
+				<FormButton type="submit">Submit</FormButton>
+			</ButtonBox>
+		</form>
 	);
 };
 
