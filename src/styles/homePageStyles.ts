@@ -1,10 +1,13 @@
 import { Box, Button } from "@mui/material";
 import { styled } from "@mui/system";
+import { color } from "framer-motion";
 
-const primaryColor = "#fe5805";
-const accentColor = "#1e38b2";
-const backgroundColor = "#f7f7f8";
-const textColor = "#333";
+const { primaryColor, accentColor, backgroundColor, textColor } = {
+	primaryColor: "#fe5805",
+	accentColor: "#1e38b2",
+	backgroundColor: "#f7f7f8",
+	textColor: "#333",
+};
 
 const StyledContainer = styled("div")`
 	margin: 40px auto;
@@ -13,8 +16,7 @@ const StyledContainer = styled("div")`
 	color: ${textColor};
 
 	@media (max-width: 600px) {
-		padding-left: 0;
-		padding-right: 0;
+		padding: 0 8px;
 	}
 `;
 
@@ -24,13 +26,17 @@ const containerStyles = {
 
 const listItemStyles = {
 	"&:hover": {
-		backgroundColor: "lightgrey",
+		backgroundColor: backgroundColor,
 	},
 	marginBottom: "8px",
 	borderRadius: "4px",
 	overflow: "hidden",
-	whiteSpace: "nowrap",
 	textOverflow: "ellipsis",
+	cursor: "pointer",
+	transition: "background-color 1s ease",
+	color: accentColor,
+	fontWeight: "bold",
+	fontSize: "18px",
 };
 
 const listItemTextSecondaryStyles = {
@@ -39,13 +45,25 @@ const listItemTextSecondaryStyles = {
 	WebkitBoxOrient: "vertical",
 	overflow: "hidden",
 	textOverflow: "ellipsis",
+	fontSize: "14px",
 };
 
 const paginationContainerStyles = {
 	display: "flex",
 	justifyContent: "center",
-	marginTop: "16px",
+	margin: "16px 0",
 };
+
+const paginationButtonStyles = {
+	"& .MuiPaginationItem-root": {
+		backgroundColor: primaryColor,
+		color: "white",
+		"&:hover": {
+			backgroundColor: accentColor,
+		},
+	},
+};
+
 
 const AddNoteButton = styled(Button)`
 	border: none;
@@ -75,6 +93,7 @@ export {
 	listItemStyles,
 	listItemTextSecondaryStyles,
 	paginationContainerStyles,
+	paginationButtonStyles,
 	StyledContainer,
 	primaryColor,
 	accentColor,

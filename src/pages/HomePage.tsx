@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
 	Box,
 	List,
@@ -8,8 +8,6 @@ import {
 	Typography,
 	Tooltip,
 	Pagination,
-	IconButton,
-	Button,
 	Grid,
 } from "@mui/material";
 import axios from "axios";
@@ -18,12 +16,14 @@ import {
 	listItemStyles,
 	listItemTextSecondaryStyles,
 	paginationContainerStyles,
+    paginationButtonStyles,
 	AddNoteButton,
 	ButtonBox,
 } from "../styles/homePageStyles";
 import { deleteNote, fetchNotes } from "../redux/slices/notesSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { Note } from "../redux/types";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const HomePage: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -85,24 +85,24 @@ const HomePage: React.FC = () => {
 					{displayNotes.map((note) => (
 						<Tooltip title={note.content} arrow placement="right" key={note.id}>
 							<ListItem
-								button
 								onClick={() => handleNoteClick(note)}
 								sx={listItemStyles}
 							>
 								<ListItemText
 									primary={note.title}
 									secondary={note.content}
+									primaryTypographyProps={{ sx: listItemStyles }}
 									secondaryTypographyProps={{ sx: listItemTextSecondaryStyles }}
 								/>
-								<IconButton
-									aria-label="Delete"
+								<DeleteIcon
+									color="disabled"
 									onClick={(e) => {
 										e.stopPropagation();
 										handleDeleteNote(note.id);
 									}}
 								>
 									Delete
-								</IconButton>
+								</DeleteIcon>
 							</ListItem>
 						</Tooltip>
 					))}
@@ -113,7 +113,7 @@ const HomePage: React.FC = () => {
 					count={Math.ceil(notes.length / itemsPerPage)}
 					page={page}
 					onChange={handlePageChange}
-					color="primary"
+                    sx={paginationButtonStyles}
 				/>
 			</Box>
 		</>

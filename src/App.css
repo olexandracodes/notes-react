@@ -1,5 +1,16 @@
+:root {
+  --primary-color: #fe5805;
+  --accent-color: #1e38b2;
+  --background-color: #f7f7f8;
+  --text-color: #333;
+}
+
 .App {
   text-align: center;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font-family: Arial, sans-serif;
+  padding: 20px;
 }
 
 .App-logo {

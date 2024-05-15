@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { TextField } from "@mui/material";
-import { ButtonBox, FormButton } from "../styles/formPageStyles";
+import { TextField, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { setForm } from "../redux/slices/formSlice";
-import { Note } from "../redux/types";
+import { ResetButton, SubmitButton } from "../styles/formPageStyles";
 
 const NoteSchema = Yup.object().shape({
 	title: Yup.string().required("Title is required"),
@@ -44,9 +43,13 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit, id }) => {
 		};
 	}, [dispatch, formik.values]);
 
+	const handleReset = () => {
+		formik.resetForm();
+	};
+
 	return (
 		<form onSubmit={formik.handleSubmit}>
-			<div style={{ marginBottom: "16px" }}>
+			<Box sx={{ marginBottom: "16px" }}>
 				<TextField
 					name="title"
 					label="Title"
@@ -57,8 +60,8 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit, id }) => {
 					error={formik.touched.title && Boolean(formik.errors.title)}
 					helperText={formik.touched.title && formik.errors.title}
 				/>
-			</div>
-			<div style={{ marginBottom: "16px" }}>
+			</Box>
+			<Box sx={{ marginBottom: "16px" }}>
 				<TextField
 					name="content"
 					label="Content"
@@ -71,10 +74,15 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit, id }) => {
 					error={formik.touched.content && Boolean(formik.errors.content)}
 					helperText={formik.touched.content && formik.errors.content}
 				/>
-			</div>
-			<ButtonBox>
-				<FormButton type="submit">Submit</FormButton>
-			</ButtonBox>
+			</Box>
+			<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+				<SubmitButton variant="contained" type="submit">
+					Submit
+				</SubmitButton>
+				<ResetButton variant="outlined" onClick={handleReset}>
+					Reset
+				</ResetButton>
+			</Box>
 		</form>
 	);
 };
