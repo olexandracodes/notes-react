@@ -1,4 +1,4 @@
-# [Note Taking App](https://notes-react-six.vercel.app/)
+# <a href="https://notes-react-six.vercel.app/" target="_blank">Note Taking App</a>
 
 This is a simple note-taking application built with React and Redux.
 
