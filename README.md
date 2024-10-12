@@ -1,4 +1,4 @@
-# <a href="https://notes-react-six.vercel.app/" target="_blank">Note Taking App</a>
+# <a href="https://notes-react-six.vercel.app/" target="_blank">Note Taking App (May 2024)</a>
 
 This is a simple note-taking application built with React and Redux.
 
@@ -44,5 +44,5 @@ This is a simple note-taking application built with React and Redux.
 - Formik
 
 ## Author
-
-Olexandra Kunytska - Frontend developer
+ 
+[Olexandra Kunytska](https://github.com/olexandracodes) - Frontend developer
